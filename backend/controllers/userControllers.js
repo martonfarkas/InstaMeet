@@ -9,6 +9,7 @@ export const getOneUser = async (req, res) => {
         }
         res.json(user)
     } catch (err) {
+        console.error('Error fetching user:', err)
         res.status(500).json({ message: err.message }) // Send error message if any
     }
 }
@@ -20,6 +21,7 @@ export const addUser = async (req, res) => {
         await newUser.save() // Save the new user to the database
         res.status(201).json(newUser) // Send the new user as json
     } catch (err) {
+        console.error('Error creating user:', err)
         res.status(400).json({ message: err.message }) // Send error message if any
     }
 }
