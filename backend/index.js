@@ -1,10 +1,12 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 
-// Import the Express application
-const app = require('./app')
+// Import the 'app' module from the 'app.js' file
+import app from './app.js'
+
+import dotenv from 'dotenv'
 
 // Load environment variables from .env file
-require('dotenv').config();
+dotenv.config()
 
 // Set the port to the value from the .env file or default to 3001
 const port = process.env.PORT || 3000
@@ -13,10 +15,7 @@ const port = process.env.PORT || 3000
 const MONGODB_URI = process.env.MONGODB_URI
 
 // Connect to MongoDB
-mongoose.connect(MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+mongoose.connect(MONGODB_URI)
   .then(() => {
     console.log('Connected to MongoDB') // Log successful connection to MongoDB
     app.listen(port, () => {

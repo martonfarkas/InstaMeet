@@ -1,17 +1,19 @@
 // Importing the Express module so you can use it to create an Express application.
-const express = require('express')
+import express from "express"
 
 // Middleware for parsing the body of incoming request objects in a middleware
-const bodyParser = require('body-parser')
+import bodyParser from 'body-parser'
 
 // Importing Mongoose to interact with a MongoDB database in a more structured and consistent way.
-const moongose = require('mongoose')
+import moongose from 'mongoose'
 
 // Configure your application to use variables stored in a .env file
-const dotenv = require('dotenv')
+import dotenv from 'dotenv'
 
 // Handle cross-origin requests.
-const cors = require('cors')
+import cors from 'cors'
+
+import userRoutes from "./routes/userRoutes.js"
 
 // Loads environment variables from a .env file into process.env.
 dotenv.config()
@@ -29,5 +31,14 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors())
 
 
+// Gets routes from userRoutes.js
+app.use('api/user', userRoutes)
+
+// GET method default route handler.
+app.get('/', (req, res) => {
+    res.send({info: 'InstaMeet-api'})
+})
+
+
 // Export the app
-module.exports = app 
+export default app
