@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPS System</title>
+</head>
+<body>
+    <button id="activateBtn">Activate GPS</button>
+    <button id="deactivateBtn">Deactivate GPS</button>
+    <input type="number" id="radiusInput" placeholder="Enter radius in meters">
+    <div id="map" style="height: 400px; width: 100%"></div>
+
+    <script>
+        let isActive = false // Flag to check if GPS is active
+        let radius = 0 // Radius in meters
+        const userId = '66751560c0bcf029e40fb4c2'
+
+        // Event listener for activating GPS
+        document.getElementById('activateBtn').addEventListener('click', () => {
+            isActive = true
+            updateLocation()
+        })
+
+        // Event listener for deactivating GPS
+        document.getElementById('deactivateBtn').addEventListener('click', () => {
+            isActive = false
+        })
+
+        // Event listener for setting the radius
+        document.getElementById('radiusInput').addEventListener('change', (event) => {
+            radius = event.target.value
+        })
+
+        // Function to update the users location
+        function updateLocation() {
+            if (isActive && navigator.geolocation) {
+                navigator.geolocation.watchPosition((position) => {
+                    const { latitude, longitude } = position.coords
+                    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`)
+                    // Send location to server
+                    fetch('users/updateLocation', {
+                        method: 'POST',
+                        headers: {
+                            'content-type': 'application/json'
+                        },
+                        body: JSON.stringify({ id: userId, latitude, longtitude, radius, isActive })
+                    })
+                })
+            }
+        }
+    </script>
+</body>
+</html>
