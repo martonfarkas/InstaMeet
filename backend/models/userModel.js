@@ -17,8 +17,8 @@ const userSchema = new mongoose.Schema({
     },
     location: {
         type: {
-            type: String,
-            enum: ['Point'], // GeoJSON type
+            type: String, // GeoJSON type
+            enum: ['Point'],
             required: true,
         }
     },
@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema({
 })
 
 // Create a 2dsphere index on the location field for geospatial queries
-UserSchema.index({ location: '2dsphere '})
+userSchema.index({ location: '2dsphere '})
 
 // Create and export the User model
 const User = mongoose.model('User', userSchema)

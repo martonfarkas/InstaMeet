@@ -27,8 +27,6 @@ app.use(bodyParser.json())
 // Middleware parses incoming request bodies that are URL-encoded.
 app.use(bodyParser.urlencoded({ extended: true }))
 
-// app.use(express.json())
-
 // Middleware enables Cross-Origin Resource Sharing (CORS) for the application.
 app.use(cors())
 

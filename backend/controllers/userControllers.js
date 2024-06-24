@@ -39,6 +39,7 @@ export const updateUserLocation = async (req, res) => {
                 },
                 radius,
                 isActive
+            },
             { new: true } // Return the updated document
             )
         if (!user) {
@@ -72,3 +73,5 @@ export const updateUserLocation = async (req, res) => {
             res.status(500).json({ message: err.message }) // Return 500 if an error occurs
         }
     }
+
+    
