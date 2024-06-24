@@ -26,3 +26,27 @@ export const addUser = async (req, res) => {
     }
 }
 
+// Handler to update user location and radius
+export const updateUserLocation = async (req, res) => {
+    try {
+        const { id, latitude, longtitude, radius, isActive } = req.body // Extract data from request body
+        const user = await findByIdAndUpdate(
+            id,
+            {
+                location: {
+                    type: 'Point',
+                    coordinates: [longtitude, latitude], // Set new coordinates
+                },
+                radius,
+                isActive
+            { new: true } // Return the updated document
+            )
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' }) // Return 404 if not found
+        }
+        res.json(user)
+            } catch (err) {
+                console.error('Error updating your location:', err)
+                res.status(500).json({ message: err.message }) // Return 500 if an error occurs
+            }
+    }
