@@ -14,13 +14,34 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        unique: true,
+    },
+    location: {
+        type: {
+            type: String,
+            enum: ['Point'], // GeoJSON type
+            required: true,
+        }
+    },
+    coordinates: {
+        type: [Number], // Array of numbers [longitude, latitude]
+        required: true,
+    },
+    radius: {
+        type: Number, // Radius in meters
+        default: 0,
+    },
+    isActive: {
+        type: Boolean, // Whether the user is active or not
+        default: false,
     },
     createdAt: {
         type: Date,
-        default: Date.now,
+        default: Date.now, // Default value is current date
     }
 })
+
+// Create a 2dsphere index on the location field for geospatial queries
+UserSchema.index({ location: '2dsphere '})
 
 // Create and export the User model
 const User = mongoose.model('User', userSchema)
