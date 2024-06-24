@@ -50,3 +50,25 @@ export const updateUserLocation = async (req, res) => {
                 res.status(500).json({ message: err.message }) // Return 500 if an error occurs
             }
     }
+
+    // Handler to get available users within a specified radius
+    export const getAvailableUsers = async (req, res) => {
+        try {
+            const { latitude, longtitude, radius } = req.query // Extract query parameters
+            const availableUsers = await User.find({
+                isActive: true, // Only find active users
+                location: {
+                    $egoWithin: {
+                        $centerSphere: [
+                            [longtitude, latitude], // Center point
+                            radius / 6378100 // Convert radius to radians (Earth's radius in meters)
+                        ]
+                    }
+                }
+            })
+            res.json(availableUsers) // Return available users
+        } catch (err) {
+            console.error('Error fetching available users:', err)
+            res.status(500).json({ message: err.message }) // Return 500 if an error occurs
+        }
+    }
