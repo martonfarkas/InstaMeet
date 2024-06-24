@@ -34,6 +34,13 @@ const userSchema = new mongoose.Schema({
         type: Boolean, // Whether the user is active or not
         default: false,
     },
+    statusMessage: {
+        type: String,
+        default: '',
+    },
+    statusExpiresAt: {
+        type: Date,
+    },
     createdAt: {
         type: Date,
         default: Date.now, // Default value is current date
