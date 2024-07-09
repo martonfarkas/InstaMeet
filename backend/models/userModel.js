@@ -30,6 +30,20 @@ const userSchema = new mongoose.Schema({
         type: Number, // Radius in meters
         default: 0,
     },
+    age: {
+        type: Number,
+        required: true,
+    },
+    ageGroup: {
+        minAge: {
+            type: Number,
+            default: 18,
+        },
+        maxAge: {
+            type: Number,
+            default: 99,
+        }
+    },
     isActive: {
         type: Boolean, // Whether the user is active or not
         default: false,

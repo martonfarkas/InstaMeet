@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getOneUser, addUser, updateUserLocation, getAvailableUsers } from '../controllers/userControllers.js' // Import user controller functions
+import { getOneUser, addUser, updateUserProfile, getAvailableUsers } from '../controllers/userControllers.js' // Import user controller functions
 
 const router = Router()
 
@@ -12,7 +12,7 @@ router.get('/:id', getOneUser)
 router.post('/', addUser)
 
 // POST request handler for updating user location and radius
-router.post('/updateLocation', updateUserLocation)
+router.post('/updateProfile', updateUserProfile)
 
 // GET request handler for getting available users within a specified radius
 router.get('/availableUsers', getAvailableUsers)

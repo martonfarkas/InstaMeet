@@ -27,17 +27,19 @@ export const addUser = async (req, res) => {
 }
 
 // Handler to update user location and radius
-export const updateUserLocation = async (req, res) => {
+export const updateUserProfile = async (req, res) => {
     try {
-        const { id, latitude, longtitude, radius, isActive } = req.body // Extract data from request body
+        const { id, age, minAge, maxAge, latitude, longtitude, radius, isActive } = req.body // Extract data from request body
         const user = await findByIdAndUpdate(
             id,
             {
+                age,
+                radius,
+                ageGroup: { minAge, maxAge },
                 location: {
                     type: 'Point',
                     coordinates: [longtitude, latitude], // Set new coordinates
                 },
-                radius,
                 isActive
             },
             { new: true } // Return the updated document
@@ -47,25 +49,32 @@ export const updateUserLocation = async (req, res) => {
         }
         res.json(user)
             } catch (err) {
-                console.error('Error updating your location:', err)
+                console.error('Error updating user profile:', err)
                 res.status(500).json({ message: err.message }) // Return 500 if an error occurs
             }
     }
 
-    // Handler to get available users within a specified radius
+    // Handler to get available users within a specified radius and age group
     export const getAvailableUsers = async (req, res) => {
         try {
-            const { latitude, longtitude, radius } = req.query // Extract query parameters
+            const { userId } = req.query // Extract query parameters
+            const user = await User.findById(userId)
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' })
+            }
+
             const availableUsers = await User.find({
                 isActive: true, // Only find active users
                 location: {
                     $egoWithin: {
                         $centerSphere: [
-                            [longtitude, latitude], // Center point
-                            radius / 6378100 // Convert radius to radians (Earth's radius in meters)
+                            [user.location.coordinates[0], user.location.coordinates[1]], // Center point
+                            user.radius / 6378100 // Convert radius to radians (Earth's radius in meters)
                         ]
                     }
-                }
+                },
+                age: { $gte: user.ageGroup.minAge, $lte: user.ageGroup.maxAge },
+                _id: { $ne: user._id } // Exclude the current user
             })
             res.json(availableUsers) // Return available users
         } catch (err) {
@@ -74,4 +83,3 @@ export const updateUserLocation = async (req, res) => {
         }
     }
 
-    
